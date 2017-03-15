@@ -39,6 +39,8 @@ body {
   margin-top: 47px;
 }
 
+@media (max-width: )
+
 a:link {
   color: rgb(83, 78, 83);
 }
@@ -73,12 +75,20 @@ a:active {
   margin-left: 90px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1200px) and (min-width: 992px) {
   .creative-title {
     font-size: 100px;
     line-height: 50px;
   }
 }
+
+
+@media (max-width: 993px) {
+  .main-photo img {
+    max-width:100%;
+  }
+}
+
 
 .line-break {
   /*width: 90%;*/

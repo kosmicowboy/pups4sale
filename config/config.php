@@ -5,7 +5,7 @@ return [
         'prefix' => '[Contact Form]'
     ],
     'emails' => [
-        'to'   => 'wyldcard4pets@gmail.com',
+        'to'   => 'kylegraydev@gmail.com',
         'from' => 'no-reply@wyldcard.net'
     ],
     'messages' => [

@@ -1,3 +1,49 @@
+<?php
+	if (isset($_POST["submit"])) {
+		$name = $_POST['name'];
+		$email = $_POST['email'];
+    $phone = $_POST['phone'];
+		$message = $_POST['message'];
+		$human = intval($_POST['human']);
+		$from = 'Demo Contact Form';
+		$to = 'kylegraydev@gmail.com';
+		$subject = 'Message from Contact Demo ';
+
+		$body = "From: $name\n Phone: $phone\n E-Mail: $email\n Message:\n $message";
+
+		// Check if name has been entered
+		if (!$_POST['name']) {
+			$errName = 'Please enter your name';
+
+		}
+
+		// Check if email has been entered and is valid
+		if (!$_POST['email'] || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+			$errEmail = 'Please enter a valid email address';
+
+		}
+
+		//Check if message has been entered
+		if (!$_POST['message']) {
+			$errMessage = 'Please enter your message';
+
+		}
+		//Check if simple anti-bot test is correct
+		// if ($human !== 5) {
+		// 	$errHuman = 'Your anti-spam is incorrect';
+		// }
+
+
+// If there are no errors, send the email
+if (!$errName && !$errEmail && !$errMessage) {
+	if (mail ($to, $subject, $body, $from)) {
+		$result='<div id="alert" class="alert alert-success">Thank You! I will be in touch</div>';
+	} else {
+		$result='<div id="alert" class="alert alert-danger">Sorry there was an error sending your message. Please try again later</div>';
+	}
+}
+	}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -135,64 +181,57 @@
           <br>
           <h1>Contact Us</h1>
           <h5 class="text-light">wyldcard4pets@gmail.com</h5>
-          <form id="contact-form" method="post" action="contact.php" role="form">
-
-            <div class="messages"></div>
-
-            <div class="controls">
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form_name">Firstname *</label>
-                            <input id="form_name" type="text" name="name" class="form-control" placeholder="Please enter your firstname *" required="required" data-error="Firstname is required.">
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form_lastname">Lastname *</label>
-                            <input id="form_lastname" type="text" name="surname" class="form-control" placeholder="Please enter your lastname *" required="required" data-error="Lastname is required.">
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form_email">Email *</label>
-                            <input id="form_email" type="email" name="email" class="form-control" placeholder="Please enter your email *" required="required" data-error="Valid email is required.">
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form_phone">Phone</label>
-                            <input id="form_phone" type="tel" name="phone" class="form-control" placeholder="Please enter your phone">
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="form_message">Message *</label>
-                            <textarea id="form_message" name="message" class="form-control" placeholder="Message for me *" rows="4" required="required" data-error="Please,leave us a message."></textarea>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <input type="submit" class="btn btn-success btn-send" value="Send message">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="text-muted"><strong>*</strong> These fields are required.</p>
-                    </div>
-                </div>
-            </div>
-
-        </form>
+          <form class="form-horizontal" role="form" method="post" action="#alert">
+            <a name="bottomOfPage"></a>
+          	<div class="form-group">
+          		<label for="name" class="col-sm-2 control-label">Name</label>
+          		<div class="col-sm-10">
+          			<input type="text" class="form-control" id="name" name="name" placeholder="First & Last Name" value="<?php echo htmlspecialchars($_POST['name']); ?>">
+          			<?php echo "<p class='text-danger'id='alert'>$errName</p>";?>
+          		</div>
+          	</div>
+          	<div class="form-group">
+          		<label for="email" class="col-sm-2 control-label">Email</label>
+          		<div class="col-sm-10">
+          			<input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="<?php echo htmlspecialchars($_POST['email']); ?>">
+          			<?php echo "<p class='text-danger'id='alert'>$errEmail</p>";?>
+          		</div>
+          	</div>
+            <div class="form-group">
+          		<label for="phone" class="col-sm-2 control-label">Email</label>
+          		<div class="col-sm-10">
+          			<input type="phone" class="form-control" id="phone" name="phone" placeholder="phone (optional)" value="<?php echo htmlspecialchars($_POST['phone']); ?>">
+          			<?php echo "<p class='text-danger' >$errPhone</p>";?>
+          		</div>
+          	</div>
+          	<div class="form-group">
+          		<label for="message" class="col-sm-2 control-label">Message</label>
+          		<div class="col-sm-10">
+          			<textarea class="form-control" rows="4" name="message"><?php echo htmlspecialchars($_POST['message']);?></textarea>
+          			<?php echo "<p class='text-danger'id='alert'>$errMessage</p>";?>
+          		</div>
+          	</div>
+          	<!-- <div class="form-group">
+          		<label for="human" class="col-sm-2 control-label">2 + 3 = ?</label>
+          		<div class="col-sm-10">
+          			<input type="text" class="form-control" id="human" name="human" placeholder="Your Answer">
+          			<php echo "<p class='text-danger'>$errHuman</p>";?>
+          		</div>
+          	</div> -->
+          	<div class="form-group">
+          		<div class="col-sm-10 col-sm-offset-2">
+          			<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+          		</div>
+          	</div>
+          	<div class="form-group">
+          		<div class="col-sm-10 col-sm-offset-2">
+          			<?php echo $result; ?>
+          		</div>
+          	</div>
+          </form>
+          <div class="">
+            .
+          </div>
 
 
         </div>

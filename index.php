@@ -13,7 +13,7 @@ if (array_key_exists('email', $_POST)) {
     //Faster and safer than using mail()
     $mail->isSMTP();
     $mail->SMTPDebug = 2;
-    USE THESE SETTINGS FOR GODADDY
+    // USE THESE SETTINGS FOR GODADDY
     $mail->Host = 'relay-hosting.secureserver.net';
     $mail->Port = 25;
     $mail->SMTPAuth = false;

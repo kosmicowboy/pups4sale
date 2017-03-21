@@ -1,49 +1,59 @@
 <?php
-	if (isset($_POST["submit"])) {
-		$name = $_POST['name'];
-		$email = $_POST['email'];
-    $phone = $_POST['phone'];
-		$message = $_POST['message'];
-		$human = intval($_POST['human']);
-		$from = 'Demo Contact Form';
-		$to = 'kylegraydev@gmail.com';
-		$subject = 'Message from Contact Demo ';
+/**
+ * This example shows how to handle a simple contact form.
+ */
+$msg = '';
+//Don't run this unless we're handling a form submission
+if (array_key_exists('email', $_POST)) {
+    date_default_timezone_set('Etc/UTC');
+    require './PHPMailerAutoload.php';
+    //Create a new PHPMailer instance
+    $mail = new PHPMailer;
+    //Tell PHPMailer to use SMTP - requires a local mail server
+    //Faster and safer than using mail()
+    $mail->isSMTP();
+    $mail->SMTPDebug = 2;
+    USE THESE SETTINGS FOR GODADDY
+    $mail->Host = 'relay-hosting.secureserver.net';
+    $mail->Port = 25;
+    $mail->SMTPAuth = false;
+    $mail->SMTPSecure = false;
 
-		$body = "From: $name\n Phone: $phone\n E-Mail: $email\n Message:\n $message";
+    // USE THESE SETTINGS FOR LOCAL
 
-		// Check if name has been entered
-		if (!$_POST['name']) {
-			$errName = 'Please enter your name';
-
-		}
-
-		// Check if email has been entered and is valid
-		if (!$_POST['email'] || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-			$errEmail = 'Please enter a valid email address';
-
-		}
-
-		//Check if message has been entered
-		if (!$_POST['message']) {
-			$errMessage = 'Please enter your message';
-
-		}
-		//Check if simple anti-bot test is correct
-		// if ($human !== 5) {
-		// 	$errHuman = 'Your anti-spam is incorrect';
-		// }
-
-
-// If there are no errors, send the email
-if (!$errName && !$errEmail && !$errMessage) {
-	if (mail ($to, $subject, $body, $from)) {
-		$result='<div id="alert" class="alert alert-success">Thank You! I will be in touch</div>';
-	} else {
-		$result='<div id="alert" class="alert alert-danger">Sorry there was an error sending your message. Please try again later</div>';
-	}
+    //Use a fixed address in your own domain as the from address
+    //**DO NOT** use the submitter's address here as it will be forgery
+    //and will cause your messages to fail SPF checks
+    $mail->setFrom('info@wyldcard.net', 'First Last');
+    //Send the message to yourself, or whoever should receive contact for submissions
+    $mail->addAddress('kylegraydev@gmail.com', 'John Doe');
+    //Put the submitter's address in a reply-to header
+    //This will fail if the address provided is invalid,
+    //in which case we should ignore the whole request
+    if ($mail->addReplyTo($_POST['email'], $_POST['name'])) {
+        $mail->Subject = 'PHPMailer contact form';
+        //Keep it simple - don't use HTML
+        $mail->isHTML(false);
+        //Build a simple message body
+        $mail->Body = <<<EOT
+Email: {$_POST['email']}
+Name: {$_POST['name']}
+Message: {$_POST['message']}
+EOT;
+        //Send the message, check for errors
+        if (!$mail->send()) {
+            //The reason for failing to send will be in $mail->ErrorInfo
+            //but you shouldn't display errors to users - process the error, log it on your server.
+            $msg = 'Sorry, something went wrong. Please try again later.';
+        } else {
+            $msg = 'Message sent! Thanks for contacting us.';
+        }
+    } else {
+        $msg = 'Invalid email address, message ignored.';
+    }
 }
-	}
 ?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -181,44 +191,44 @@ if (!$errName && !$errEmail && !$errMessage) {
           <br>
           <h1>Contact Us</h1>
           <h5 class="text-light">wyldcard4pets@gmail.com</h5>
-          <form class="form-horizontal" role="form" method="post" action="#alert">
+          <!-- <form class="form-horizontal" role="form" method="post" action="contact.php">
             <a name="bottomOfPage"></a>
           	<div class="form-group">
           		<label for="name" class="col-sm-2 control-label">Name</label>
           		<div class="col-sm-10">
           			<input type="text" class="form-control" id="name" name="name" placeholder="First & Last Name" value="<?php echo htmlspecialchars($_POST['name']); ?>">
-          			<?php echo "<p class='text-danger'id='alert'>$errName</p>";?>
+          			<php echo "<p class='text-danger'id='alert'>$errName</p>";?>
           		</div>
           	</div>
           	<div class="form-group">
           		<label for="email" class="col-sm-2 control-label">Email</label>
           		<div class="col-sm-10">
           			<input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="<?php echo htmlspecialchars($_POST['email']); ?>">
-          			<?php echo "<p class='text-danger'id='alert'>$errEmail</p>";?>
+          			<php echo "<p class='text-danger'id='alert'>$errEmail</p>";?>
           		</div>
           	</div>
             <div class="form-group">
-          		<label for="phone" class="col-sm-2 control-label">Email</label>
+          		<label for="phone" class="col-sm-2 control-label">Phone</label>
           		<div class="col-sm-10">
           			<input type="phone" class="form-control" id="phone" name="phone" placeholder="phone (optional)" value="<?php echo htmlspecialchars($_POST['phone']); ?>">
-          			<?php echo "<p class='text-danger' >$errPhone</p>";?>
+          			<php echo "<p class='text-danger' >$errPhone</p>";?>
           		</div>
           	</div>
           	<div class="form-group">
           		<label for="message" class="col-sm-2 control-label">Message</label>
           		<div class="col-sm-10">
-          			<textarea class="form-control" rows="4" name="message"><?php echo htmlspecialchars($_POST['message']);?></textarea>
-          			<?php echo "<p class='text-danger'id='alert'>$errMessage</p>";?>
+          			<textarea class="form-control" rows="4" name="message"><php echo htmlspecialchars($_POST['message']);?></textarea>
+          			<php echo "<p class='text-danger'id='alert'>$errMessage</p>";?>
           		</div>
           	</div>
-          	<!-- <div class="form-group">
+          	<! <div class="form-group">
           		<label for="human" class="col-sm-2 control-label">2 + 3 = ?</label>
           		<div class="col-sm-10">
           			<input type="text" class="form-control" id="human" name="human" placeholder="Your Answer">
           			<php echo "<p class='text-danger'>$errHuman</p>";?>
           		</div>
           	</div> -->
-          	<div class="form-group">
+          	<!-- <div class="form-group">
           		<div class="col-sm-10 col-sm-offset-2">
           			<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
           		</div>
@@ -228,6 +238,12 @@ if (!$errName && !$errEmail && !$errMessage) {
           			<?php echo $result; ?>
           		</div>
           	</div>
+          </form>  -->
+          <form method="POST">
+            <label for="name">Name: <input type="text" name="name" id="name"></label><br>
+            <label for="email">Email address: <input type="email" name="email" id="email"></label><br>
+            <label for="message">Message: <textarea name="message" id="message" rows="8" cols="20"></textarea></label><br>
+            <input type="submit" value="Send">
           </form>
           <div class="">
             .

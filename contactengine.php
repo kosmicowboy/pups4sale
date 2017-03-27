@@ -62,7 +62,11 @@ if ($success){
 else{
   print "<meta http-equiv=\"refresh\" content=\"0;URL=error.htm\">";
 }
+
+phpinfo();
 ?>
+
+<?php echo '1'; ?>
 
 
 <html><p>Thank you for your email!</p></html>

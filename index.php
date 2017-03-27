@@ -208,11 +208,20 @@ EOT;
           <?php if (!empty($msg)) {
               echo "<h2>$msg</h2>";
           } ?>
-            <form method="POST">
-                <label for="name">Name: <input type="text" name="name" id="name"></label><br>
-                <label for="email">Email address: <input type="email" name="email" id="email"></label><br>
-                <label for="message">Message: <textarea name="message" id="message" rows="8" cols="20"></textarea></label><br>
-                <input type="submit" value="Send">
+            <form method="post" action="contactengine.php">
+              <label for="Name">Name:</label>
+              <input type="text" name="Name" id="Name" />
+
+              <label for="City">City:</label>
+              <input type="text" name="City" id="City" />
+
+              <label for="Email">Email:</label>
+              <input type="text" name="Email" id="Email" />
+
+              <label for="Message">Message:</label><br />
+              <textarea name="Message" rows="20" cols="20" id="Message"></textarea>
+
+              <input type="submit" name="submit" value="Submit" class="submit-button" />
             </form>
           <div class="">
             .

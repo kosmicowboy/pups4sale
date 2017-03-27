@@ -1,3 +1,57 @@
+<?php
+/**
+ * This example shows how to handle a simple contact form.
+ */
+$msg = '';
+
+// show errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+//Don't run this unless we're handling a form submission
+if (array_key_exists('email', $_POST)) {
+    date_default_timezone_set('Etc/UTC');
+    require './PHPMailerAutoload.php';
+    //Create a new PHPMailer instance
+    $mail = new PHPMailer;
+    //Tell PHPMailer to use SMTP - requires a local mail server
+    //Faster and safer than using mail()
+    $mail->isSMTP();
+    $mail->Host = 'smtp.sendgrid.net';
+    $mail->Port = 25;
+    //Use a fixed address in your own domain as the from address
+    //**DO NOT** use the submitter's address here as it will be forgery
+    //and will cause your messages to fail SPF checks
+    $mail->setFrom('from@example.com', 'First Last');
+    //Send the message to yourself, or whoever should receive contact for submissions
+    $mail->addAddress('kylegraydev@gmail.com', 'John Doe');
+    //Put the submitter's address in a reply-to header
+    //This will fail if the address provided is invalid,
+    //in which case we should ignore the whole request
+    if ($mail->addReplyTo($_POST['email'], $_POST['name'])) {
+        $mail->Subject = 'PHPMailer contact form';
+        //Keep it simple - don't use HTML
+        $mail->isHTML(false);
+        //Build a simple message body
+        $mail->Body = <<<EOT
+Email: {$_POST['email']}
+Name: {$_POST['name']}
+Message: {$_POST['message']}
+EOT;
+        //Send the message, check for errors
+        if (!$mail->send()) {
+            //The reason for failing to send will be in $mail->ErrorInfo
+            //but you shouldn't display errors to users - process the error, log it on your server.
+            $msg = 'Sorry, something went wrong. Please try again later.';
+        } else {
+            $msg = 'Message sent! Thanks for contacting us.';
+        }
+    } else {
+        $msg = 'Invalid email address, message ignored.';
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -135,19 +189,15 @@
           <br>
           <h1>Contact Us</h1>
           <h5 class="text-light">wyldcard4pets@gmail.com</h5>
-          <form action="/webformmailer.php" method="post">
-            <input type="hidden" name="subject" value="Submission" />
-            <input type="hidden" name="redirect" value="thankyou.html" />
-            First Name:  <input type="text" name="FirstName" />
-            Last Name  :<input type="text" name="LastName" />
-            Email:  <input type="text" name="email" />
-            Comments:  <textarea name="comments" cols="40" rows="10">
-            Type comments here.</textarea>
-            <input type="submit" name="submit" value="submit"/>
-            <input type="hidden" name="form_order" value="alpha"/>
-            <input type="hidden" name="form_delivery" value="hourly_digest"/>
-            <input type="hidden" name="form_format" value="html"/>
-          </form>
+          <?php if (!empty($msg)) {
+              echo "<h2>$msg</h2>";
+          } ?>
+            <form method="POST">
+                <label for="name">Name: <input type="text" name="name" id="name"></label><br>
+                <label for="email">Email address: <input type="email" name="email" id="email"></label><br>
+                <label for="message">Message: <textarea name="message" id="message" rows="8" cols="20"></textarea></label><br>
+                <input type="submit" value="Send">
+            </form>
           <div class="">
             .
           </div>

@@ -7,9 +7,22 @@ $mail->Port = '487'
 $username='apiapi'
 $password='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'
 
-$EmailFrom = "test@gmail.com";
-$EmailTo = "kylegraydev@gmail.com";
-$Subject = "Nice & Simple Contact Form by CSS-Tricks";
+// using SendGrid's PHP Library
+// https://github.com/sendgrid/sendgrid-php
+require 'vendor/autoload.php';
+$sendgrid = new SendGrid("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");
+$email    = new SendGrid\Email();
+
+$email->addTo("kylegraydev@gmail.com")
+      ->setFrom("wildcard4pets@me.com")
+      ->setSubject("Sending with SendGrid is Fun")
+      ->setHtml("and easy to do anywhere, even with PHP");
+
+
+
+// $EmailFrom = "test@gmail.com";
+// $EmailTo = "kylegraydev@gmail.com";
+// $Subject = "Nice & Simple Contact Form by CSS-Tricks";
 $Name = Trim(stripslashes($_POST['Name']));
 $Tel = Trim(stripslashes($_POST['Tel']));
 $Email = Trim(stripslashes($_POST['Email']));
@@ -37,8 +50,10 @@ $Body .= "Message: ";
 $Body .= $Message;
 $Body .= "\n";
 
+$sendgrid->send($email);
+
 // send email
-$success = mail($EmailTo, $Subject, $Body, "From: <$EmailFrom>");
+// $success = mail($EmailTo, $Subject, $Body, "From: <$EmailFrom>");
 
 // redirect to success page
 if ($success){

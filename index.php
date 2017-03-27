@@ -1,59 +1,3 @@
-<?php
-/**
- * This example shows how to handle a simple contact form.
- */
-$msg = '';
-//Don't run this unless we're handling a form submission
-if (array_key_exists('email', $_POST)) {
-    date_default_timezone_set('Etc/UTC');
-    require './PHPMailerAutoload.php';
-    //Create a new PHPMailer instance
-    $mail = new PHPMailer;
-    //Tell PHPMailer to use SMTP - requires a local mail server
-    //Faster and safer than using mail()
-    $mail->isSMTP();
-    $mail->SMTPDebug = 2;
-    // USE THESE SETTINGS FOR GODADDY
-    $mail->Host = 'relay-hosting.secureserver.net';
-    $mail->Port = 25;
-    $mail->SMTPAuth = false;
-    $mail->SMTPSecure = false;
-
-    // USE THESE SETTINGS FOR LOCAL
-
-    //Use a fixed address in your own domain as the from address
-    //**DO NOT** use the submitter's address here as it will be forgery
-    //and will cause your messages to fail SPF checks
-    $mail->setFrom('info@wyldcard.net', 'First Last');
-    //Send the message to yourself, or whoever should receive contact for submissions
-    $mail->addAddress('kylegraydev@gmail.com', 'John Doe');
-    //Put the submitter's address in a reply-to header
-    //This will fail if the address provided is invalid,
-    //in which case we should ignore the whole request
-    if ($mail->addReplyTo($_POST['email'], $_POST['name'])) {
-        $mail->Subject = 'PHPMailer contact form';
-        //Keep it simple - don't use HTML
-        $mail->isHTML(false);
-        //Build a simple message body
-        $mail->Body = <<<EOT
-Email: {$_POST['email']}
-Name: {$_POST['name']}
-Message: {$_POST['message']}
-EOT;
-        //Send the message, check for errors
-        if (!$mail->send()) {
-            //The reason for failing to send will be in $mail->ErrorInfo
-            //but you shouldn't display errors to users - process the error, log it on your server.
-            $msg = 'Sorry, something went wrong. Please try again later.';
-        } else {
-            $msg = 'Message sent! Thanks for contacting us.';
-        }
-    } else {
-        $msg = 'Invalid email address, message ignored.';
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -191,59 +135,18 @@ EOT;
           <br>
           <h1>Contact Us</h1>
           <h5 class="text-light">wyldcard4pets@gmail.com</h5>
-          <!-- <form class="form-horizontal" role="form" method="post" action="contact.php">
-            <a name="bottomOfPage"></a>
-          	<div class="form-group">
-          		<label for="name" class="col-sm-2 control-label">Name</label>
-          		<div class="col-sm-10">
-          			<input type="text" class="form-control" id="name" name="name" placeholder="First & Last Name" value="<?php echo htmlspecialchars($_POST['name']); ?>">
-          			<php echo "<p class='text-danger'id='alert'>$errName</p>";?>
-          		</div>
-          	</div>
-          	<div class="form-group">
-          		<label for="email" class="col-sm-2 control-label">Email</label>
-          		<div class="col-sm-10">
-          			<input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="<?php echo htmlspecialchars($_POST['email']); ?>">
-          			<php echo "<p class='text-danger'id='alert'>$errEmail</p>";?>
-          		</div>
-          	</div>
-            <div class="form-group">
-          		<label for="phone" class="col-sm-2 control-label">Phone</label>
-          		<div class="col-sm-10">
-          			<input type="phone" class="form-control" id="phone" name="phone" placeholder="phone (optional)" value="<?php echo htmlspecialchars($_POST['phone']); ?>">
-          			<php echo "<p class='text-danger' >$errPhone</p>";?>
-          		</div>
-          	</div>
-          	<div class="form-group">
-          		<label for="message" class="col-sm-2 control-label">Message</label>
-          		<div class="col-sm-10">
-          			<textarea class="form-control" rows="4" name="message"><php echo htmlspecialchars($_POST['message']);?></textarea>
-          			<php echo "<p class='text-danger'id='alert'>$errMessage</p>";?>
-          		</div>
-          	</div>
-          	<! <div class="form-group">
-          		<label for="human" class="col-sm-2 control-label">2 + 3 = ?</label>
-          		<div class="col-sm-10">
-          			<input type="text" class="form-control" id="human" name="human" placeholder="Your Answer">
-          			<php echo "<p class='text-danger'>$errHuman</p>";?>
-          		</div>
-          	</div> -->
-          	<!-- <div class="form-group">
-          		<div class="col-sm-10 col-sm-offset-2">
-          			<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
-          		</div>
-          	</div>
-          	<div class="form-group">
-          		<div class="col-sm-10 col-sm-offset-2">
-          			<?php echo $result; ?>
-          		</div>
-          	</div>
-          </form>  -->
-          <form method="POST">
-            <label for="name">Name: <input type="text" name="name" id="name"></label><br>
-            <label for="email">Email address: <input type="email" name="email" id="email"></label><br>
-            <label for="message">Message: <textarea name="message" id="message" rows="8" cols="20"></textarea></label><br>
-            <input type="submit" value="Send">
+          <form action="/webformmailer.php" method="post">
+            <input type="hidden" name="subject" value="Submission" />
+            <input type="hidden" name="redirect" value="thankyou.html" />
+            First Name:  <input type="text" name="FirstName" />
+            Last Name  :<input type="text" name="LastName" />
+            Email:  <input type="text" name="email" />
+            Comments:  <textarea name="comments" cols="40" rows="10">
+            Type comments here.</textarea>
+            <input type="submit" name="submit" value="submit"/>
+            <input type="hidden" name="form_order" value="alpha"/>
+            <input type="hidden" name="form_delivery" value="hourly_digest"/>
+            <input type="hidden" name="form_format" value="html"/>
           </form>
           <div class="">
             .

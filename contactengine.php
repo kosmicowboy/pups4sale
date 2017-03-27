@@ -63,3 +63,4 @@ else{
   print "<meta http-equiv=\"refresh\" content=\"0;URL=error.htm\">";
 }
 ?>
+<p>Thank you for your email!</p>

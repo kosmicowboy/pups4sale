@@ -138,7 +138,7 @@
           <?php if (!empty($msg)) {
               echo "<h2>$msg</h2>";
           } ?>
-            <form method="post" action="contactengine.php">
+            <form method="post" action="./contactengine.php">
               <label for="Name">Name:</label>
               <input type="text" name="Name" id="Name" />
 

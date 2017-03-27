@@ -1,6 +1,13 @@
 <?php
 
-$EmailFrom = "chriscoyier@gmail.com";
+$mail->IsSMTP();
+$mail->CharSet = 'UTF-8';
+$mail->Server = 'smtp.sendgrid.net'
+$mail->Port = '487'
+$username='apiapi'
+$password='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'
+
+$EmailFrom = "test@gmail.com";
 $EmailTo = "kylegraydev@gmail.com";
 $Subject = "Nice & Simple Contact Form by CSS-Tricks";
 $Name = Trim(stripslashes($_POST['Name']));

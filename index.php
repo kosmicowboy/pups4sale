@@ -75,6 +75,26 @@
                 </div>
                 <div data-u="slides" style="cursor:default;position:relative;top:0px;left:0px;width:600px;height:450px;overflow:hidden;">
                     <div>
+                        <img data-u="image" src="img/full/face2.jpg" />
+                        <img data-u="thumb" src="img/thumbs/face-2-thumb.jpg" />
+                    </div>
+                    <div>
+                        <img data-u="image" src="img/full/face3.jpg" />
+                        <img data-u="thumb" src="img/thumbs/face-3-thumb.jpg" />
+                    </div>
+                    <div>
+                        <img data-u="image" src="img/full/face4.jpg" />
+                        <img data-u="thumb" src="img/thumbs/face-4-thumb.jpg" />
+                    </div>
+                    <div>
+                        <img data-u="image" src="img/full/face5.jpg" />
+                        <img data-u="thumb" src="img/thumbs/face-5-thumb.jpg" />
+                    </div>
+                    <div>
+                        <img data-u="image" src="img/full/face6.jpg" />
+                        <img data-u="thumb" src="img/thumbs/face-6-thumb.jpg" />
+                    </div>
+                    <div>
                         <img data-u="image" src="img/full/mom-1.jpg" />
                         <img data-u="thumb" src="img/thumbs/mom-1-thumb.jpg" />
                     </div>
@@ -85,6 +105,18 @@
                     <div>
                         <img data-u="image" src="img/full/mom-3.jpg" />
                         <img data-u="thumb" src="img/thumbs/mom-3-thumb.jpg" />
+                    </div>
+                    <div>
+                        <img data-u="image" src="img/full/pups-1.jpg" />
+                        <img data-u="thumb" src="img/thumbs/pups-1-thumb.jpg" />
+                    </div>
+                    <div>
+                        <img data-u="image" src="img/full/pups-2.jpg" />
+                        <img data-u="thumb" src="img/thumbs/pups-2-thumb.jpg" />
+                    </div>
+                    <div>
+                        <img data-u="image" src="img/full/pups-3.jpg" />
+                        <img data-u="thumb" src="img/thumbs/pups-3-thumb.jpg" />
                     </div>
                     <div>
                         <img data-u="image" src="img/full/pups-4.jpg" />
@@ -171,3 +203,14 @@
     <script src="js/main.js"></script>
   </body>
 </html>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-87097743-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
